@@ -3,7 +3,7 @@ dockerfile = "infra/Dockerfile"
 
 [deploy]
 # Use the CMD from Dockerfile
-healthcheckPath = "/railway-healthcheck.html"
+healthcheckPath = "/railway-healthcheck.php"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 

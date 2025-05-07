@@ -107,6 +107,10 @@ RUN echo '<VirtualHost *:80>\n\
 # Expose Apache
 EXPOSE 80
 
-# Simple startup to ensure Apache runs
-CMD ["apache2-foreground"]
+# Copy the startup script and make it executable
+COPY scripts/startup.sh /usr/local/bin/startup.sh
+RUN chmod +x /usr/local/bin/startup.sh
+
+# Set the entrypoint
+CMD ["/usr/local/bin/startup.sh"]
 
