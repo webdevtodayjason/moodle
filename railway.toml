@@ -1,6 +1,5 @@
 [build]
 dockerfile = "infra/Dockerfile"
-builder = "paketobuildpacks/builder:base"
 
 [deploy]
 startCommand = "/usr/local/bin/startup.sh"
