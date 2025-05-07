@@ -1,0 +1,33 @@
+[build]
+dockerfile = "infra/Dockerfile"
+builder = "paketobuildpacks/builder:base"
+
+[deploy]
+startCommand = "/usr/local/bin/startup.sh"
+healthcheckPath = "/healthcheck.php"
+healthcheckTimeout = 300
+restartPolicyType = "on_failure"
+
+# Required environment variables
+[variables]
+MOODLE_ADMIN_USER = "admin"
+MOODLE_ADMIN_PASSWORD.required = true
+MOODLE_SITE_NAME = "Moodle LMS"
+MOODLE_SITE_SHORTNAME = "Moodle"
+PHP_MAX_EXECUTION_TIME = "600"
+PHP_MEMORY_LIMIT = "512M"
+PHP_UPLOAD_MAX_FILESIZE = "256M"
+PHP_POST_MAX_SIZE = "256M"
+HEALTHCHECK_TOKEN.required = true
+
+# Mount persistent storage for Moodle data
+[[mounts]]
+source = "moodle-data"
+destination = "/data"
+
+# Define services
+[services.database]
+image = "postgres:14-alpine"
+envs = { POSTGRES_USER = "moodle", POSTGRES_PASSWORD.required = true, POSTGRES_DB = "moodle" }
+volumes = ["postgres-moodle:/var/lib/postgresql/data"]
+

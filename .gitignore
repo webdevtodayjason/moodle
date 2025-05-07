@@ -1,3 +1,53 @@
+# Moodle specific files to ignore
+config.php
+/data/
+/moodledata/
+/error_log
+/.htaccess
+
+# PHP specific
+vendor/
+composer.lock
+.php_cs.cache
+.php-cs-fixer.cache
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Editor/IDE specific
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.buildpath
+.settings/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Logs and databases
+*.log
+*.sqlite
+*.sqlite3
+*.db
+
+# Generated files
+node_modules/
+/cache/
+/.sass-cache/
+/package-lock.json
+/package.json
+/yarn.lock
+/yarn-error.log
+
+# Railway specific
+.railway/
+
 # This file specifies intentionally untracked files that all Moodle git
 # repositories should ignore. It is recommended not to modify this file in your
 # local clone. Instead, use .git/info/exclude and add new records there as
