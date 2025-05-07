@@ -23,7 +23,7 @@ HEALTHCHECK_TOKEN.required = true
 # Mount persistent storage for Moodle data
 [[mounts]]
 source = "moodle-data"
-destination = "/data"
+destination = "/moodledata"
 
 # Define services
 [services.database]

@@ -73,11 +73,9 @@ RUN { \
 # Setup document root
 WORKDIR /var/www/html
 
-# Create moodledata directory and set permissions
-RUN mkdir -p /var/www/moodledata \
-    && chown -R www-data:www-data /var/www/html /var/www/moodledata \
-    && chmod -R 755 /var/www/html \
-    && chmod -R 777 /var/www/moodledata
+# Setup document root permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
 
 # Copy moodle codebase
 COPY . /var/www/html/
@@ -87,9 +85,9 @@ RUN chown -R www-data:www-data /var/www/html
 RUN composer install --no-dev --optimize-autoloader
 
 # Create directory for persistent storage
-RUN mkdir -p /data/moodledata \
-    && chown -R www-data:www-data /data/moodledata \
-    && chmod -R 777 /data/moodledata
+RUN mkdir -p /moodledata \
+    && chown -R www-data:www-data /moodledata \
+    && chmod -R 777 /moodledata
 
 # Setup supervisor to manage cron
 COPY infra/supervisord.conf /etc/supervisor/conf.d/supervisord.conf

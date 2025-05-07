@@ -97,7 +97,7 @@ global \$CFG;
 );
 
 \$CFG->wwwroot   = '$SITE_URL';
-\$CFG->dataroot  = '/data/moodledata';
+\$CFG->dataroot  = '/moodledata';
 \$CFG->directorypermissions = 02777;
 \$CFG->admin = 'admin';
 
@@ -123,8 +123,8 @@ EOF
     log "Running Moodle installation..."
     # Run the Moodle CLI installation
     sudo -u www-data php /var/www/html/admin/cli/install.php \
-        --chmod=2777 \
-        --lang=en \
+        --wwwroot=$SITE_URL \
+        --dataroot=/moodledata \
         --dbtype=pgsql \
         --dbhost=$DB_HOST \
         --dbname=$DB_NAME \
@@ -132,8 +132,6 @@ EOF
         --dbpass=$DB_PASSWORD \
         --dbport=$DB_PORT \
         --prefix=mdl_ \
-        --wwwroot=$SITE_URL \
-        --dataroot=/data/moodledata \
         --fullname="$SITE_NAME" \
         --shortname="$SITE_SHORTNAME" \
         --adminuser=$ADMIN_USER \
@@ -157,12 +155,12 @@ chmod 0644 /etc/cron.d/moodle
 touch /var/log/moodle-cron.log
 chown www-data:www-data /var/log/moodle-cron.log
 
-# Create any required directories and set permissions
-log "Setting up directory permissions..."
-mkdir -p /data/moodledata
-chown -R www-data:www-data /data/moodledata /var/www/html
+# Create Moodle data directory and set permissions
+log "Setting up Moodle data directory permissions..."
+mkdir -p /moodledata
+chown -R www-data:www-data /moodledata /var/www/html
 chmod -R 755 /var/www/html
-chmod -R 777 /data/moodledata
+chmod -R 777 /moodledata
 
 # Create supervisor log directory if it doesn't exist
 mkdir -p /var/log/supervisor
