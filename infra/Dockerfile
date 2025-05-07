@@ -104,7 +104,10 @@ RUN echo '<VirtualHost *:80>\n\
 
 # Create startup script
 COPY scripts/startup.sh /usr/local/bin/startup.sh
-RUN chmod +x /usr/local/bin/startup.sh
+RUN chmod +x /usr/local/bin/startup.sh && \
+    # Make sure the script exists and is executable
+    ls -la /usr/local/bin/startup.sh && \
+    cat /usr/local/bin/startup.sh | head -5
 
 # Expose Apache
 EXPOSE 80
