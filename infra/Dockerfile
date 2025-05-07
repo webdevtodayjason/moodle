@@ -102,12 +102,16 @@ RUN echo '<VirtualHost *:80>\n\
     </Directory>\n\
 </VirtualHost>' > /etc/apache2/sites-available/000-default.conf
 
-# Create startup script
-COPY scripts/startup.sh /usr/local/bin/startup.sh
-RUN chmod +x /usr/local/bin/startup.sh && \
-    # Make sure the script exists and is executable
-    ls -la /usr/local/bin/startup.sh && \
-    cat /usr/local/bin/startup.sh | head -5
+# Create startup script directly in the image
+RUN echo '#!/bin/bash' > /usr/local/bin/startup.sh && \
+    echo 'set -e' >> /usr/local/bin/startup.sh && \
+    echo 'echo "Starting Moodle initialization..."' >> /usr/local/bin/startup.sh && \
+    echo 'mkdir -p /moodledata' >> /usr/local/bin/startup.sh && \
+    echo 'chown -R www-data:www-data /moodledata' >> /usr/local/bin/startup.sh && \
+    echo 'chmod -R 777 /moodledata' >> /usr/local/bin/startup.sh && \
+    echo 'apache2-foreground' >> /usr/local/bin/startup.sh && \
+    chmod +x /usr/local/bin/startup.sh && \
+    ls -la /usr/local/bin/startup.sh
 
 # Expose Apache
 EXPOSE 80

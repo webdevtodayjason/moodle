@@ -2,8 +2,8 @@
 dockerfile = "infra/Dockerfile"
 
 [deploy]
-startCommand = "/usr/local/bin/startup.sh"
-healthcheckPath = "/healthcheck.php"
+startCommand = "bash /usr/local/bin/startup.sh"
+healthcheckPath = "/railway-healthcheck.php"
 healthcheckTimeout = 300
 restartPolicyType = "on_failure"
 
