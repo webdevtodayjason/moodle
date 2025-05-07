@@ -19,8 +19,24 @@ $dbHost = $matches[3];
 $dbPort = $matches[4];
 $dbName = $matches[5];
 
-// Determine site URL
-$siteUrl = getenv('RAILWAY_STATIC_URL') ?: getenv('RAILWAY_PUBLIC_DOMAIN') ? 'https://' . getenv('RAILWAY_PUBLIC_DOMAIN') : getenv('RAILWAY_URL') ?: 'http://localhost';
+// Determine site URL - always use HTTPS for Railway deployments
+if (getenv('RAILWAY_STATIC_URL')) {
+    $siteUrl = getenv('RAILWAY_STATIC_URL');
+} elseif (getenv('RAILWAY_PUBLIC_DOMAIN')) {
+    $siteUrl = 'https://' . getenv('RAILWAY_PUBLIC_DOMAIN');
+} elseif (getenv('RAILWAY_URL')) {
+    // Ensure Railway URL uses https
+    $railwayUrl = getenv('RAILWAY_URL');
+    if (strpos($railwayUrl, 'http://') === 0) {
+        $railwayUrl = 'https://' . substr($railwayUrl, 7);
+    }
+    $siteUrl = $railwayUrl;
+} else {
+    $siteUrl = 'https://localhost';
+}
+
+// Ensure site URL ends without a trailing slash
+$siteUrl = rtrim($siteUrl, '/');
 
 // Create the config.php file
 $configContent = <<<EOT
@@ -61,6 +77,12 @@ date_default_timezone_set('UTC');
 
 // Security
 \$CFG->passwordpolicy = 0;
+
+// Force HTTPS for all URLs
+\$CFG->sslproxy = true;  // Trust the proxy to handle SSL
+
+// Set slasharguments (needed for CSS to load properly)
+\$CFG->slasharguments = true;
 
 require_once(__DIR__ . '/lib/setup.php');
 EOT;
